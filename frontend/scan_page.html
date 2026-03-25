@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS - New Scan</title>
+<style>
+:root {
+  --navy:#0F2355; --blue:#1A4FA8; --blue-mid:#2563EB;
+  --blue-light:#EFF6FF; --blue-border:#BFDBFE;
+  --saffron:#F59E0B; --saffron2:#FCD34D;
+  --green:#16A34A; --green-light:#F0FDF4; --green-border:#BBF7D0;
+  --bg:#F1F5FD; --surface:#FFFFFF; --surface2:#F8FAFF;
+  --border:#E2E8F4; --border2:#EEF2FA;
+  --text:#0F172A; --text2:#475569; --text3:#94A3B8;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+  --sh:0 2px 8px rgba(15,35,85,.06),0 0 0 1px rgba(15,35,85,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--sans);}
+
+.scan-line{position:fixed;left:0;right:0;height:2px;z-index:999;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(37,99,235,.6) 40%,rgba(245,158,11,.6) 60%,transparent);animation:scan 6s ease-in-out infinite;}
+@keyframes scan{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:.8}100%{top:100vh;opacity:0}}
+
+.nav{position:sticky;top:0;z-index:100;height:56px;background:var(--navy);display:flex;align-items:center;padding:0 28px;box-shadow:0 2px 16px rgba(15,35,85,.28);}
+.n-brand{display:flex;align-items:center;gap:10px;}
+.n-seal{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FCD34D,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--navy);box-shadow:0 0 0 2px rgba(245,158,11,.25);flex-shrink:0;}
+.n-t1{font-size:13px;font-weight:700;color:#fff;}
+.n-t2{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;}
+.n-div{width:1px;height:22px;background:rgba(255,255,255,.1);margin:0 20px;}
+.n-links{display:flex;gap:2px;}
+.n-a{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.6);text-decoration:none;transition:all .15s;}
+.n-a:hover,.n-a.on{color:#fff;background:rgba(255,255,255,.12);}
+.n-r{margin-left:auto;}
+.n-out{padding:5px 13px;border-radius:7px;font-size:11.5px;font-weight:600;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.25);color:#fca5a5;text-decoration:none;transition:all .15s;}
+.n-out:hover{background:rgba(220,38,38,.22);color:#fff;}
+
+.wrap{padding:28px;max-width:640px;margin:0 auto;}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.ph{margin-bottom:22px;animation:up .4s ease;}
+.bc{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:5px;}
+.ph h1{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.03em;}
+.ph p{font-size:13px;color:var(--text2);margin-top:4px;}
+
+.card{background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--sh);overflow:hidden;animation:up .5s ease .1s both;}
+.ch{padding:15px 22px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.ct{font-size:13.5px;font-weight:700;color:var(--text);}
+.chip{font-size:9.5px;font-family:var(--mono);padding:3px 8px;border-radius:6px;background:var(--green-light);color:var(--green);border:1px solid var(--green-border);}
+
+/* Drop zone */
+.dz{margin:22px;border:2px dashed #C0D4FF;border-radius:12px;padding:44px 24px;text-align:center;cursor:pointer;background:#FAFCFF;transition:all .2s;position:relative;}
+.dz:hover,.dz.over{border-color:var(--blue-mid);background:var(--blue-light);}
+.dz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.dz-ico{font-size:48px;margin-bottom:14px;display:block;line-height:1;}
+.dz-t{font-size:17px;font-weight:700;color:var(--text);margin-bottom:5px;letter-spacing:-.02em;}
+.dz-s{font-size:13px;color:var(--text2);margin-bottom:16px;}
+.dz-btn{display:inline-block;padding:8px 22px;background:var(--blue-light);border:1.5px solid var(--blue-border);border-radius:8px;color:var(--blue-mid);font-size:13px;font-weight:600;pointer-events:none;}
+.dz-fmt{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.05em;}
+
+/* File chosen */
+.fc{display:none;align-items:center;gap:10px;margin:0 22px 4px;padding:11px 14px;background:#EFF6FF;border:1.5px solid var(--blue-border);border-radius:10px;}
+.fc.show{display:flex;}
+.fc-check{color:var(--green);font-size:18px;flex-shrink:0;}
+.fc-name{font-size:13px;font-weight:600;color:var(--blue-mid);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fc-size{font-size:11px;font-family:var(--mono);color:var(--text3);flex-shrink:0;}
+.fc-rm{background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);padding:0 4px;transition:color .15s;flex-shrink:0;}
+.fc-rm:hover{color:#DC2626;}
+
+/* Preview */
+.prev{display:none;margin:10px 22px 0;}
+.prev.show{display:block;}
+.prev-l{font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.prev img{max-width:100%;max-height:240px;border-radius:9px;border:1px solid var(--border);display:block;}
+
+/* Action row */
+.ar{padding:18px 22px 22px;border-top:1px solid var(--border2);display:flex;gap:10px;margin-top:18px;}
+.btn-back{padding:11px 18px;border-radius:9px;background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;text-decoration:none;transition:all .15s;}
+.btn-back:hover{background:var(--border2);color:var(--text);}
+.btn-scan{flex:1;padding:12px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(15,35,85,.25);}
+.btn-scan:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,35,85,.32);}
+.btn-scan:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* Processing overlay */
+.ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(15,23,42,.5);backdrop-filter:blur(10px);align-items:center;justify-content:center;}
+.ov.show{display:flex;}
+.ov-card{background:#fff;border-radius:18px;padding:34px 38px;box-shadow:0 24px 64px rgba(0,0,0,.18);text-align:center;min-width:280px;}
+.spinner{width:56px;height:56px;border-radius:50%;margin:0 auto 16px;border:3px solid var(--border);border-top-color:var(--blue-mid);border-right-color:var(--saffron);animation:spin .85s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ov-t{font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:-.02em;}
+.ov-s{font-size:12px;color:var(--text2);margin-bottom:18px;}
+.steps{display:flex;flex-direction:column;gap:6px;text-align:left;}
+.step{display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:7px;font-size:11.5px;font-family:var(--mono);color:var(--text3);background:var(--surface2);border:1px solid var(--border);}
+.step.done{color:var(--green);background:var(--green-light);border-color:var(--green-border);}
+.step.active{color:var(--blue-mid);background:var(--blue-light);border-color:var(--blue-border);}
+.si{width:14px;text-align:center;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="scan-line"></div>
+
+<nav class="nav">
+  <div class="n-brand">
+    <div class="n-seal">AI</div>
+    <div><div class="n-t1">CSS Portal</div><div class="n-t2">Cargo Security Screening</div></div>
+  </div>
+  <div class="n-div"></div>
+  <div class="n-links">
+    <a href="/dashboard" class="n-a">Dashboard</a>
+    <a href="/scan" class="n-a on">New Scan</a>
+    <a href="#" class="n-a">Reports</a>
+  </div>
+  <div class="n-r"><a href="/logout" class="n-out">Sign Out</a></div>
+</nav>
+
+<div class="wrap">
+  <div class="ph">
+    <div class="bc">CSS / New Scan</div>
+    <h1>New Cargo Scan</h1>
+    <p>Upload an X-ray image to run AI threat detection</p>
+  </div>
+
+  <form method="POST" action="/predict" enctype="multipart/form-data" id="sf">
+    <div class="card">
+      <div class="ch">
+        <span class="ct">Upload X-Ray Image</span>
+        <span class="chip">YOLOv8 Ready</span>
+      </div>
+
+      <div class="dz" id="dz">
+        <input type="file" name="image" id="fi" accept=".jpg,.jpeg,.png,.bmp,.tiff" required>
+        <span class="dz-ico">&#128269;</span>
+        <div class="dz-t">Drop your X-ray image here</div>
+        <div class="dz-s">or click to browse files from your device</div>
+        <div class="dz-btn">Browse Files</div>
+        <div class="dz-fmt">JPG &nbsp;&#183;&nbsp; JPEG &nbsp;&#183;&nbsp; PNG &nbsp;&#183;&nbsp; BMP &nbsp;&#183;&nbsp; TIFF</div>
+      </div>
+
+      <div class="fc" id="fc">
+        <span class="fc-check">&#10003;</span>
+        <span class="fc-name" id="fn">—</span>
+        <span class="fc-size" id="fz">—</span>
+        <button type="button" class="fc-rm" id="frm">&#10005;</button>
+      </div>
+
+      <div class="prev" id="pv">
+        <div class="prev-l">Preview</div>
+        <img id="pi" src="" alt="preview">
+      </div>
+
+      <div class="ar">
+        <a href="/dashboard" class="btn-back">&#8592; Back</a>
+        <button type="submit" class="btn-scan" id="sg" disabled>&#9654; &nbsp;Run AI Scan</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="ov" id="ov">
+  <div class="ov-card">
+    <div class="spinner"></div>
+    <div class="ov-t">Analysing...</div>
+    <div class="ov-s">AI is processing your image</div>
+    <div class="steps">
+      <div class="step" id="s1"><span class="si">&#9675;</span>Loading image</div>
+      <div class="step" id="s2"><span class="si">&#9675;</span>Preprocessing</div>
+      <div class="step" id="s3"><span class="si">&#9675;</span>Running YOLOv8</div>
+      <div class="step" id="s4"><span class="si">&#9675;</span>Classifying detections</div>
+      <div class="step" id="s5"><span class="si">&#9675;</span>Generating report</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var fi=document.getElementById('fi'),fc=document.getElementById('fc'),
+    fn=document.getElementById('fn'),fz=document.getElementById('fz'),
+    frm=document.getElementById('frm'),pv=document.getElementById('pv'),
+    pi=document.getElementById('pi'),sg=document.getElementById('sg'),
+    dz=document.getElementById('dz');
+
+fi.addEventListener('change',function(e){var f=e.target.files[0];if(f)load(f);});
+function load(f){fn.textContent=f.name;fz.textContent=(f.size/1024).toFixed(1)+' KB';fc.classList.add('show');sg.disabled=false;var r=new FileReader();r.onload=function(e){pi.src=e.target.result;pv.classList.add('show');};r.readAsDataURL(f);}
+frm.addEventListener('click',function(){fi.value='';fc.classList.remove('show');pv.classList.remove('show');sg.disabled=true;});
+dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('over');});
+dz.addEventListener('dragleave',function(){dz.classList.remove('over');});
+dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('over');var f=e.dataTransfer.files[0];if(f){var dt=new DataTransfer();dt.items.add(f);fi.files=dt.files;load(f);}});
+document.getElementById('sf').addEventListener('submit',function(){
+  document.getElementById('ov').classList.add('show');
+  var ss=['s1','s2','s3','s4','s5'],i=0;
+  function nx(){if(i>0){var p=document.getElementById(ss[i-1]);p.classList.remove('active');p.classList.add('done');p.querySelector('.si').textContent='\u2713';}if(i<ss.length){var c=document.getElementById(ss[i]);c.classList.add('active');c.querySelector('.si').textContent='\u25B6';i++;setTimeout(nx,500+Math.random()*300);}}
+  nx();
+});
+</script>
+</body>
+</html>

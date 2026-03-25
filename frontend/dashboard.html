@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS - Dashboard</title>
+<style>
+:root {
+  --navy:#0F2355; --blue:#1A4FA8; --blue-mid:#2563EB;
+  --blue-light:#EFF6FF; --blue-border:#BFDBFE;
+  --saffron:#F59E0B; --saffron2:#FCD34D;
+  --green:#16A34A; --green-light:#F0FDF4; --green-border:#BBF7D0;
+  --red:#DC2626; --red-light:#FEF2F2; --red-border:#FECACA;
+  --amber-light:#FFFBEB; --amber-border:#FDE68A;
+  --bg:#F1F5FD; --surface:#FFFFFF; --surface2:#F8FAFF;
+  --border:#E2E8F4; --border2:#EEF2FA;
+  --text:#0F172A; --text2:#475569; --text3:#94A3B8;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+  --sh:0 2px 8px rgba(15,35,85,.06),0 0 0 1px rgba(15,35,85,.04);
+  --sh2:0 4px 20px rgba(15,35,85,.1),0 0 0 1px rgba(15,35,85,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--sans);}
+
+.scan-line{position:fixed;left:0;right:0;height:2px;z-index:999;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(37,99,235,.6) 40%,rgba(245,158,11,.6) 60%,transparent);animation:scan 6s ease-in-out infinite;}
+@keyframes scan{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:.8}100%{top:100vh;opacity:0}}
+
+.nav{position:sticky;top:0;z-index:100;height:56px;background:var(--navy);display:flex;align-items:center;padding:0 28px;box-shadow:0 2px 16px rgba(15,35,85,.28);}
+.n-brand{display:flex;align-items:center;gap:10px;}
+.n-seal{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FCD34D,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--navy);box-shadow:0 0 0 2px rgba(245,158,11,.25);flex-shrink:0;}
+.n-t1{font-size:13px;font-weight:700;color:#fff;}
+.n-t2{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;}
+.n-div{width:1px;height:22px;background:rgba(255,255,255,.1);margin:0 20px;}
+.n-links{display:flex;gap:2px;}
+.n-a{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.6);text-decoration:none;transition:all .15s;}
+.n-a:hover,.n-a.on{color:#fff;background:rgba(255,255,255,.12);}
+.n-r{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.n-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 11px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.6);}
+.odot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.n-out{padding:5px 13px;border-radius:7px;font-size:11.5px;font-weight:600;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.25);color:#fca5a5;text-decoration:none;transition:all .15s;}
+.n-out:hover{background:rgba(220,38,38,.22);color:#fff;}
+
+.wrap{padding:28px;max-width:1200px;margin:0 auto;}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;animation:up .4s ease;}
+.ph h1{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.03em;}
+.ph p{font-size:13px;color:var(--text3);margin-top:3px;}
+.btn-newscan{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;font-family:var(--sans);font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(15,35,85,.25);}
+.btn-newscan:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,35,85,.32);}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.sc{background:var(--surface);border-radius:13px;border:1px solid var(--border);padding:18px 20px;box-shadow:var(--sh);transition:all .2s;animation:up .4s ease both;display:flex;align-items:center;gap:14px;}
+.sc:hover{box-shadow:var(--sh2);transform:translateY(-1px);}
+.sc:nth-child(1){animation-delay:.04s}.sc:nth-child(2){animation-delay:.08s}
+.sc:nth-child(3){animation-delay:.12s}.sc:nth-child(4){animation-delay:.16s}
+.sc-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ib{background:var(--blue-light)}.ig{background:var(--green-light)}
+.ir2{background:var(--red-light)}.ia{background:var(--amber-light)}
+.sc-v{font-size:28px;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.02em;}
+.sc-v span{font-size:11px;font-weight:400;color:var(--text3);margin-left:3px;}
+.sc-l{font-size:12px;font-weight:600;color:var(--text2);margin-top:4px;}
+.sc-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+
+.main-grid{display:grid;grid-template-columns:1fr 280px;gap:18px;}
+.left,.right{display:flex;flex-direction:column;gap:18px;}
+
+.card{background:var(--surface);border-radius:13px;border:1px solid var(--border);box-shadow:var(--sh);overflow:hidden;animation:up .5s ease .15s both;}
+.ch{padding:14px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.ct{font-size:13px;font-weight:700;color:var(--text);}
+.chip{font-size:9.5px;font-family:var(--mono);padding:3px 8px;border-radius:6px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);}
+.chip.g{background:var(--green-light);color:var(--green);border-color:var(--green-border);}
+
+table{width:100%;border-collapse:collapse;}
+th{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;padding:9px 18px;text-align:left;background:var(--surface2);border-bottom:1px solid var(--border);}
+td{padding:11px 18px;border-bottom:1px solid var(--border2);font-size:12.5px;color:var(--text2);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#F7FAFF;}
+.td-id{font-family:var(--mono);font-size:11px;color:var(--blue-mid);font-weight:600;}
+.td-time{font-family:var(--mono);font-size:11px;}
+.td-bold{font-weight:600;color:var(--text);}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.b-clear{background:var(--green-light);color:var(--green);border:1px solid var(--green-border);}
+.b-flag{background:var(--red-light);color:var(--red);border:1px solid var(--red-border);}
+.b-med{background:var(--amber-light);color:#92400E;border:1px solid var(--amber-border);}
+.bd{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+.empty-state{padding:40px 24px;text-align:center;color:var(--text3);}
+.empty-state .ei{font-size:36px;margin-bottom:10px;}
+.empty-state p{font-size:13px;margin-bottom:14px;}
+.empty-state a{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;background:var(--blue-light);border:1px solid var(--blue-border);color:var(--blue-mid);font-size:13px;font-weight:600;text-decoration:none;}
+
+.srows{padding:2px 0;}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--border2);font-size:12.5px;}
+.sr:last-child{border-bottom:none;}
+.sr .sl{color:var(--text2);font-weight:500;}
+.sr .sv{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text);}
+.svd{width:7px;height:7px;border-radius:50%;}
+.svd.ok{background:#22c55e;box-shadow:0 0 5px rgba(34,197,94,.5);}
+
+.qa{display:flex;flex-direction:column;gap:7px;padding:14px 16px;}
+.qb{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid transparent;transition:all .15s;}
+.qb1{background:var(--blue-light);color:var(--blue-mid);border-color:var(--blue-border);}
+.qb1:hover{background:#DBEAFE;}
+.qb2{background:var(--surface2);color:var(--text2);border-color:var(--border);}
+.qb2:hover{background:var(--border2);}
+</style>
+</head>
+<body>
+<div class="scan-line"></div>
+
+<nav class="nav">
+  <div class="n-brand">
+    <div class="n-seal">AI</div>
+    <div><div class="n-t1">CSS Portal</div><div class="n-t2">Cargo Security Screening</div></div>
+  </div>
+  <div class="n-div"></div>
+  <div class="n-links">
+    <a href="/dashboard" class="n-a on">Dashboard</a>
+    <a href="/scan" class="n-a">New Scan</a>
+    <a href="#" class="n-a">Reports</a>
+  </div>
+  <div class="n-r">
+    <div class="n-chip"><div class="odot"></div>Online</div>
+    <a href="/logout" class="n-out">Sign Out</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="ph">
+    <div>
+      <h1>Dashboard</h1>
+      <p id="datestr">—</p>
+    </div>
+    <a href="/scan" class="btn-newscan">&#128269; &nbsp;New Scan</a>
+  </div>
+
+  <div class="stats">
+    <div class="sc">
+      <div class="sc-ico ib">&#128230;</div>
+      <div>
+        <div class="sc-v">{{ total }}<span>scans</span></div>
+        <div class="sc-l">Total Scans</div>
+        <div class="sc-sub">This session</div>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-ico ig">&#9989;</div>
+      <div>
+        <div class="sc-v">{{ cleared }}<span>clear</span></div>
+        <div class="sc-l">Cleared</div>
+        <div class="sc-sub">{% if total > 0 %}{{ "%.0f" % ((cleared / total) * 100) }}% rate{% else %}No scans yet{% endif %}</div>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-ico ir2">&#9888;</div>
+      <div>
+        <div class="sc-v">{{ flagged }}<span>flagged</span></div>
+        <div class="sc-l">Threats Found</div>
+        <div class="sc-sub">Requires review</div>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-ico ia">&#9889;</div>
+      <div>
+        <div class="sc-v">233<span>ms</span></div>
+        <div class="sc-l">Avg Inference</div>
+        <div class="sc-sub">YOLOv8 engine</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="left">
+      <div class="card">
+        <div class="ch">
+          <span class="ct">Recent Scans</span>
+          <span class="chip">Last {{ last5|length }}</span>
+        </div>
+        {% if last5 %}
+        <table>
+          <thead>
+            <tr><th>Scan ID</th><th>Time</th><th>Detected</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            {% for s in last5 %}
+            <tr>
+              <td class="td-id">{{ s.scan_id }}</td>
+              <td class="td-time">{{ s.time }}</td>
+              <td class="td-bold">{{ s.detected }}</td>
+              <td>
+                {% if s.risk == 'Safe' %}
+                  <span class="badge b-clear"><span class="bd"></span>Clear</span>
+                {% elif 'HIGH' in s.risk %}
+                  <span class="badge b-flag"><span class="bd"></span>High Threat</span>
+                {% else %}
+                  <span class="badge b-med"><span class="bd"></span>{{ s.risk }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <div class="ei">&#128230;</div>
+          <p>No scans yet. Run your first scan to see results here.</p>
+          <a href="/scan">&#128269; Start First Scan</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <div class="ch"><span class="ct">System Status</span><span class="chip g">Online</span></div>
+        <div class="srows">
+          <div class="sr"><span class="sl">AI Model</span><span class="sv"><div class="svd ok"></div>YOLOv8</span></div>
+          <div class="sr"><span class="sl">Inference</span><span class="sv"><div class="svd ok"></div>Active</span></div>
+          <div class="sr"><span class="sl">Avg Speed</span><span class="sv">233 ms</span></div>
+          <div class="sr"><span class="sl">Session Scans</span><span class="sv">{{ total }}</span></div>
+          <div class="sr"><span class="sl">Uptime</span><span class="sv" id="upt">—</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="ct">Quick Actions</span></div>
+        <div class="qa">
+          <a href="/scan" class="qb qb1">&#128269; &nbsp;New Scan</a>
+          <a href="/logout" class="qb qb2">&#8594; &nbsp;Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('datestr').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric',timeZone:'Asia/Kolkata'});
+var s=5114;setInterval(function(){s++;var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);document.getElementById('upt').textContent=h+'h '+String(m).padStart(2,'0')+'m';},1000);
+document.getElementById('upt').textContent='1h 25m';
+</script>
+</body>
+</html>
