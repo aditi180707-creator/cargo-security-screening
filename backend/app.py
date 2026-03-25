@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = "secret123"
 
 # Load your trained model
-model = YOLO(r"C:\Users\HP\OneDrive\Desktop\cargo-ai-detector\dataset\runs\detect\train\weights\best.pt")
+model = YOLO('best.pt')
 
 UPLOAD_FOLDER = "uploads"
 STATIC_OUTPUT = "static/output"
