@@ -1,0 +1,14 @@
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+*.pt
+*.pth
+runs/
+.env
+dataset/
+runs/
+*.pt
+uploads/
+*.jpg
+*.png

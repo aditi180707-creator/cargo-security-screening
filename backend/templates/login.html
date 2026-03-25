@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS - Login</title>
+<style>
+:root {
+  --navy:#0F2355; --blue:#1A4FA8; --blue-mid:#2563EB;
+  --blue-light:#EFF6FF; --blue-border:#BFDBFE;
+  --saffron:#F59E0B; --saffron2:#FCD34D;
+  --bg:#F1F5FD; --surface:#FFFFFF; --surface2:#F8FAFF;
+  --border:#E2E8F4;
+  --text:#0F172A; --text2:#475569; --text3:#94A3B8;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:var(--sans);}
+
+/* Full split layout */
+.layout {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:100vh;
+}
+
+/* LEFT PANEL — navy gradient with features */
+.left-panel {
+  background:linear-gradient(160deg, #0a1a3e 0%, #0F2355 40%, #1A4FA8 100%);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:48px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Background grid lines */
+.left-panel::before {
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size:48px 48px;
+}
+
+/* Glow blob */
+.left-panel::after {
+  content:'';
+  position:absolute;
+  bottom:-80px;right:-80px;
+  width:320px;height:320px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(245,158,11,0.12), transparent 70%);
+  pointer-events:none;
+}
+
+.lp-top { position:relative; z-index:1; }
+
+.lp-logo {
+  display:inline-flex;align-items:center;gap:10px;
+  margin-bottom:48px;
+}
+.lp-logo-mark {
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  border:1px solid rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.lp-logo-mark svg { width:22px;height:22px; }
+.lp-logo-text .lt1 { font-size:15px;font-weight:700;color:#fff;letter-spacing:-.01em; }
+.lp-logo-text .lt2 { font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase;margin-top:1px; }
+
+.lp-heading {
+  font-size:32px;font-weight:700;color:#fff;
+  line-height:1.2;letter-spacing:-.03em;
+  margin-bottom:14px;
+}
+.lp-heading span { color:var(--saffron2); }
+
+.lp-sub {
+  font-size:14px;color:rgba(255,255,255,.55);
+  line-height:1.7;max-width:320px;
+  margin-bottom:48px;
+}
+
+/* Feature list */
+.features { display:flex;flex-direction:column;gap:16px;position:relative;z-index:1; }
+.feat {
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;
+  backdrop-filter:blur(8px);
+}
+.feat-icon {
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.25);
+  display:flex;align-items:center;justify-content:center;
+}
+.feat-icon svg { width:18px;height:18px; }
+.feat-text .ft1 { font-size:13px;font-weight:600;color:#fff; }
+.feat-text .ft2 { font-size:11px;color:rgba(255,255,255,.45);margin-top:2px; }
+
+/* Status bar at bottom */
+.lp-bottom {
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:8px;
+  padding-top:32px;border-top:1px solid rgba(255,255,255,.08);
+}
+.status-dot { width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulse 2s infinite;flex-shrink:0; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-text { font-size:11.5px;color:rgba(255,255,255,.45);font-family:var(--mono); }
+.status-text strong { color:rgba(255,255,255,.7);font-weight:500; }
+.lp-clock { margin-left:auto;font-size:11px;color:rgba(255,255,255,.3);font-family:var(--mono); }
+
+/* RIGHT PANEL — login form */
+.right-panel {
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  padding:48px 40px;
+}
+
+.scan-line{position:fixed;left:0;right:0;height:2px;z-index:999;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(37,99,235,.5) 40%,rgba(245,158,11,.5) 60%,transparent);animation:scan 6s ease-in-out infinite;}
+@keyframes scan{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:.8}100%{top:100vh;opacity:0}}
+
+.form-wrap { width:100%;max-width:360px; }
+
+.form-header { margin-bottom:32px; }
+.form-header .fh-label {
+  font-size:11px;font-weight:600;color:var(--text3);
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.form-header h2 {
+  font-size:26px;font-weight:700;color:var(--text);
+  letter-spacing:-.03em;margin-bottom:6px;
+}
+.form-header p { font-size:13.5px;color:var(--text2);line-height:1.5; }
+
+.err {
+  background:#FEF2F2;border:1px solid #FECACA;border-radius:9px;
+  padding:10px 14px;margin-bottom:18px;
+  font-size:12.5px;color:#DC2626;
+  display:flex;align-items:center;gap:8px;
+}
+.err-icon { width:16px;height:16px;flex-shrink:0; }
+
+.fg { margin-bottom:16px; }
+.fg label {
+  display:block;font-size:11.5px;font-weight:600;color:var(--text2);
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:7px;
+}
+.iw { position:relative; }
+.iw .iico {
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  color:var(--text3);display:flex;align-items:center;pointer-events:none;
+}
+.iw .iico svg { width:15px;height:15px; }
+.iw input {
+  width:100%;padding:12px 14px 12px 40px;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:9px;font-family:var(--sans);font-size:14px;
+  color:var(--text);outline:none;transition:all .2s;
+}
+.iw input::placeholder { color:var(--text3); }
+.iw input:focus {
+  border-color:var(--blue-mid);background:#fff;
+  box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+.btn-login {
+  width:100%;padding:13px;margin-top:8px;
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  border:none;border-radius:9px;color:#fff;
+  font-family:var(--sans);font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 14px rgba(15,35,85,.28);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,35,85,.36);}
+.btn-login:active{transform:translateY(0);}
+.btn-arrow { transition:transform .2s; }
+.btn-login:hover .btn-arrow { transform:translateX(3px); }
+
+.form-footer {
+  margin-top:28px;padding-top:20px;
+  border-top:1px solid var(--border);
+  font-size:11.5px;color:var(--text3);
+  text-align:center;line-height:1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout { grid-template-columns:1fr; }
+  .left-panel { display:none; }
+}
+</style>
+</head>
+<body>
+<div class="scan-line"></div>
+
+<div class="layout">
+
+  <!-- LEFT: Branding panel -->
+  <div class="left-panel">
+    <div class="lp-top">
+      <div class="lp-logo">
+        <div class="lp-logo-mark">
+          <!-- Cargo/scan icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
+        <div class="lp-logo-text">
+          <div class="lt1">CSS</div>
+          <div class="lt2">Cargo Security Screening</div>
+        </div>
+      </div>
+
+      <h1 class="lp-heading">Cargo<br><span>Security Screening</span></h1>
+      <p class="lp-sub">Instant threat identification using YOLOv8 deep learning. Upload any cargo X-ray and get a full detection report in seconds.</p>
+
+      <div class="features">
+        <div class="feat">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--saffron2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <div class="feat-text">
+            <div class="ft1">Real-time Detection</div>
+            <div class="ft2">YOLOv8 inference in under 300ms</div>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--saffron2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="feat-text">
+            <div class="ft1">Threat Classification</div>
+            <div class="ft2">High / Medium / Low risk scoring</div>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--saffron2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <div class="feat-text">
+            <div class="ft1">Instant PDF Report</div>
+            <div class="ft2">Annotated results ready to save</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lp-bottom">
+      <div class="status-dot"></div>
+      <div class="status-text"><strong>All systems operational</strong> &nbsp;&#183;&nbsp; YOLOv8 model loaded</div>
+      <div class="lp-clock" id="clock">--:--</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Login form -->
+  <div class="right-panel">
+    <div class="form-wrap">
+
+      <div class="form-header">
+        <div class="fh-label">Secure Access</div>
+        <h2>Sign in to CSS</h2>
+        <p>Enter your credentials to access the inspection dashboard.</p>
+      </div>
+
+      {% if error %}
+      <div class="err">
+        <svg class="err-icon" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+          <div class="err">
+            <svg class="err-icon" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            {{ msg }}
+          </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="/">
+        <div class="fg">
+          <label>Username</label>
+          <div class="iw">
+            <span class="iico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="text" name="username" placeholder="Enter your username" required autocomplete="off">
+          </div>
+        </div>
+
+        <div class="fg">
+          <label>Password</label>
+          <div class="iw">
+            <span class="iico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <input type="password" name="password" placeholder="Enter your password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          Sign In
+          <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </form>
+
+      <div class="form-footer">
+        Authorised personnel only &nbsp;&#183;&nbsp; All sessions are monitored
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-IN',{hour12:false,timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});}
+setInterval(tick,1000);tick();
+</script>
+</body>
+</html>

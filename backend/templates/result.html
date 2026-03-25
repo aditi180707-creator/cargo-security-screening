@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAIS - Scan Results</title>
+<style>
+:root {
+  --navy:#0F2355; --blue:#1A4FA8; --blue-mid:#2563EB;
+  --blue-light:#EFF6FF; --blue-border:#BFDBFE;
+  --saffron:#F59E0B; --saffron2:#FCD34D;
+  --saffron-light:#FFFBEB; --saffron-border:#FDE68A;
+  --green:#16A34A; --green-light:#F0FDF4; --green-border:#BBF7D0;
+  --red:#DC2626; --red-light:#FEF2F2; --red-border:#FECACA;
+  --bg:#F1F5FD; --surface:#FFFFFF; --surface2:#F8FAFF;
+  --border:#E2E8F4; --border2:#EEF2FA;
+  --text:#0F172A; --text2:#475569; --text3:#94A3B8;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+  --sh:0 2px 8px rgba(15,35,85,.06),0 0 0 1px rgba(15,35,85,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--sans);}
+
+.scan-line{position:fixed;left:0;right:0;height:2px;z-index:999;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(37,99,235,.6) 40%,rgba(245,158,11,.6) 60%,transparent);animation:scan 6s ease-in-out infinite;}
+@keyframes scan{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:.8}100%{top:100vh;opacity:0}}
+
+.nav{position:sticky;top:0;z-index:100;height:56px;background:var(--navy);display:flex;align-items:center;padding:0 28px;box-shadow:0 2px 16px rgba(15,35,85,.28);}
+.n-brand{display:flex;align-items:center;gap:10px;}
+.n-seal{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FCD34D,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--navy);box-shadow:0 0 0 2px rgba(245,158,11,.25);flex-shrink:0;}
+.n-t1{font-size:13px;font-weight:700;color:#fff;}
+.n-t2{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;}
+.n-div{width:1px;height:22px;background:rgba(255,255,255,.1);margin:0 20px;}
+.n-links{display:flex;gap:2px;}
+.n-a{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.6);text-decoration:none;transition:all .15s;}
+.n-a:hover,.n-a.on{color:#fff;background:rgba(255,255,255,.12);}
+.n-r{margin-left:auto;}
+.n-out{padding:5px 13px;border-radius:7px;font-size:11.5px;font-weight:600;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.25);color:#fca5a5;text-decoration:none;transition:all .15s;}
+.n-out:hover{background:rgba(220,38,38,.22);color:#fff;}
+
+.wrap{padding:28px;max-width:1060px;margin:0 auto;}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.ph{margin-bottom:20px;animation:up .4s ease;}
+.bc{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:5px;}
+.ph h1{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.03em;}
+
+/* Verdict */
+.verdict{border-radius:13px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;animation:up .4s ease .05s both;}
+.v-safe{background:var(--green-light);border:1.5px solid var(--green-border);}
+.v-low{background:var(--saffron-light);border:1.5px solid var(--saffron-border);}
+.v-med{background:#FFF7ED;border:1.5px solid #FED7AA;}
+.v-high{background:var(--red-light);border:1.5px solid var(--red-border);}
+.v-ico{font-size:28px;flex-shrink:0;}
+.v-title{font-size:16px;font-weight:700;}
+.v-safe .v-title{color:var(--green);}
+.v-low .v-title,.v-med .v-title{color:#92400E;}
+.v-high .v-title{color:var(--red);}
+.v-sub{font-size:12.5px;color:var(--text2);margin-top:3px;}
+.v-meta{margin-left:auto;text-align:right;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:2;}
+
+.tcol{display:grid;grid-template-columns:1fr 290px;gap:16px;}
+.lcol,.rcol{display:flex;flex-direction:column;gap:16px;}
+
+.card{background:var(--surface);border-radius:13px;border:1px solid var(--border);box-shadow:var(--sh);overflow:hidden;animation:up .5s ease .1s both;}
+.ch{padding:14px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.ct{font-size:13.5px;font-weight:700;color:var(--text);}
+.chip{font-size:9.5px;font-family:var(--mono);padding:3px 8px;border-radius:6px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);}
+
+.img-wrap{padding:18px;text-align:center;}
+.img-wrap img{max-width:100%;border-radius:10px;border:1px solid var(--border);box-shadow:0 4px 18px rgba(15,35,85,.08);}
+.img-cap{font-size:10.5px;color:var(--text3);font-family:var(--mono);margin-top:9px;}
+
+.det-box{padding:16px 20px;border-top:1px solid var(--border2);display:flex;align-items:center;gap:14px;}
+.det-ico{font-size:26px;flex-shrink:0;}
+.det-count{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.det-risk{display:inline-flex;align-items:center;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.dr-safe{background:var(--green-light);color:var(--green);border:1px solid var(--green-border);}
+.dr-low{background:var(--saffron-light);color:#92400E;border:1px solid var(--saffron-border);}
+.dr-med{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA;}
+.dr-high{background:var(--red-light);color:var(--red);border:1px solid var(--red-border);}
+
+.info-rows{padding:4px 0;}
+.ir{display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid var(--border2);}
+.ir:last-child{border-bottom:none;}
+.ir-l{font-size:11px;font-weight:600;color:var(--text3);}
+.ir-v{font-family:var(--mono);font-size:11px;color:var(--text);text-align:right;word-break:break-all;max-width:160px;}
+.color-safe{font-weight:700;color:var(--green);}
+.color-high{font-weight:700;color:var(--red);}
+.color-amber{font-weight:700;color:#C2410C;}
+
+.acts{display:flex;flex-direction:column;gap:8px;padding:16px 18px;}
+.btn-print{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--saffron),#FBBF24);color:#78350F;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(245,158,11,.28);transition:all .2s;}
+.btn-print:hover{transform:translateY(-1px);}
+.btn-ns{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:9px;background:var(--blue-light);border:1.5px solid var(--blue-border);color:var(--blue-mid);font-size:13px;font-weight:600;text-decoration:none;transition:all .15s;}
+.btn-ns:hover{background:#DBEAFE;}
+.btn-db{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:9px;background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;text-decoration:none;transition:all .15s;}
+.btn-db:hover{background:var(--border2);}
+
+@media print{.nav,.acts,.scan-line{display:none!important;}body{background:#fff;}.card{box-shadow:none;border:1px solid #ddd;}}
+</style>
+</head>
+<body>
+<div class="scan-line"></div>
+
+<nav class="nav">
+  <div class="n-brand">
+    <div class="n-seal">AI</div>
+    <div><div class="n-t1">CAIS Portal</div><div class="n-t2">Cargo AI Inspection System</div></div>
+  </div>
+  <div class="n-div"></div>
+  <div class="n-links">
+    <a href="/dashboard" class="n-a">Dashboard</a>
+    <a href="/scan" class="n-a">New Scan</a>
+    <a href="#" class="n-a on">Results</a>
+  </div>
+  <div class="n-r"><a href="/logout" class="n-out">Sign Out</a></div>
+</nav>
+
+<div class="wrap">
+  <div class="ph">
+    <div class="bc">CAIS / Results</div>
+    <h1>Scan Results</h1>
+  </div>
+
+  {% if "Safe" in risk %}
+  <div class="verdict v-safe">
+    <div class="v-ico">&#9989;</div>
+    <div><div class="v-title">NO THREATS DETECTED</div><div class="v-sub">AI inspection complete. No prohibited items found in this scan.</div></div>
+    <div class="v-meta">Scan #SC-<span id="sid"></span><br><span id="ts"></span></div>
+  </div>
+  {% elif "HIGH" in risk %}
+  <div class="verdict v-high">
+    <div class="v-ico">&#128680;</div>
+    <div><div class="v-title">HIGH THREAT DETECTED</div><div class="v-sub">Prohibited items identified. Immediate review required.</div></div>
+    <div class="v-meta">Scan #SC-<span id="sid"></span><br><span id="ts"></span></div>
+  </div>
+  {% elif "Medium" in risk %}
+  <div class="verdict v-med">
+    <div class="v-ico">&#9888;</div>
+    <div><div class="v-title">MEDIUM RISK</div><div class="v-sub">Items detected that require manual review before clearance.</div></div>
+    <div class="v-meta">Scan #SC-<span id="sid"></span><br><span id="ts"></span></div>
+  </div>
+  {% else %}
+  <div class="verdict v-low">
+    <div class="v-ico">&#9888;</div>
+    <div><div class="v-title">LOW RISK</div><div class="v-sub">One or two items detected. Please verify before clearing.</div></div>
+    <div class="v-meta">Scan #SC-<span id="sid"></span><br><span id="ts"></span></div>
+  </div>
+  {% endif %}
+
+  <div class="tcol">
+    <div class="lcol">
+      <div class="card">
+        <div class="ch"><span class="ct">Detection Output</span><span class="chip">YOLOv8 Annotated</span></div>
+        <div class="img-wrap">
+          <img src="{{ url_for('static', filename='output/' + result_image) }}" alt="Detection result">
+          <div class="img-cap">Bounding boxes mark all detected objects</div>
+        </div>
+        <div class="det-box">
+          <div class="det-ico">{% if "Safe" in risk %}&#9989;{% elif "HIGH" in risk %}&#128680;{% else %}&#9888;{% endif %}</div>
+          <div>
+            <div class="det-count">{{ detections }}</div>
+            <span class="det-risk {% if 'Safe' in risk %}dr-safe{% elif 'HIGH' in risk %}dr-high{% elif 'Medium' in risk %}dr-med{% else %}dr-low{% endif %}">{{ risk }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rcol">
+      <div class="card">
+        <div class="ch"><span class="ct">Scan Details</span></div>
+        <div class="info-rows">
+          <div class="ir"><span class="ir-l">Time</span><span class="ir-v" id="rt"></span></div>
+          <div class="ir"><span class="ir-l">Engine</span><span class="ir-v">YOLOv8</span></div>
+          <div class="ir"><span class="ir-l">Model</span><span class="ir-v">best.pt</span></div>
+          <div class="ir"><span class="ir-l">Result</span><span class="ir-v">{{ detections }}</span></div>
+          <div class="ir">
+            <span class="ir-l">Risk</span>
+            <span class="ir-v {% if 'Safe' in risk %}color-safe{% elif 'HIGH' in risk %}color-high{% else %}color-amber{% endif %}">{{ risk }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="ct">Actions</span></div>
+        <div class="acts">
+          <button class="btn-print" onclick="window.print()">&#128438; &nbsp;Save as PDF</button>
+          <a href="/scan" class="btn-ns">&#128269; &nbsp;Scan Another</a>
+          <a href="/dashboard" class="btn-db">&#8592; &nbsp;Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var now=new Date();
+var ts=now.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:false})+' IST';
+document.getElementById('sid').textContent=Math.floor(Math.random()*1000+2800);
+document.getElementById('ts').textContent=ts;
+document.getElementById('rt').textContent=ts;
+</script>
+</body>
+</html>
